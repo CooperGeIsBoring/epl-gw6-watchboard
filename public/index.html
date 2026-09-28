@@ -46,7 +46,8 @@
     .owned{display:grid;gap:5px}
     .player{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;align-items:center;padding:7px 7px;background:#f7f9fb;border-radius:5px;border-left:3px solid var(--owner-color,#8290a4);min-width:0}
     .pname{font-size:11px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}.pmeta{font-size:8px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status{font-size:7px;font-weight:900;border-radius:3px;padding:4px;white-space:nowrap}
-    .status.start{background:var(--green-bg);color:var(--green)}.status.q{background:var(--amber-bg);color:var(--amber)}.status.out{background:var(--red-bg);color:var(--red)}.status.sus{background:var(--purple-bg);color:var(--purple)}
+    .status.start{background:var(--green-bg);color:var(--green)}.status.q{background:var(--amber-bg);color:var(--amber)}.status.out{background:var(--red-bg);color:var(--red)}.status.sus{background:var(--purple-bg);color:var(--purple)}.status.bench{background:#e8edf4;color:#475467}.status.ir{background:#fde7eb;color:#a61b35}
+    .reserve-title{font-size:8px;color:#8a4b00;font-weight:900;margin:9px 0 5px;text-transform:uppercase}.reserve-list{display:grid;gap:5px}.reserve-player{background:#fff8e6;border-left-color:#d79316}.reserve-player.ir-row{background:#fff0f2;border-left-color:#d92d4d}.reserve-note{font-size:7px;color:#7a6170;margin-top:2px;line-height:1.35}
     .fa-title{font-size:8px;color:var(--muted);font-weight:900;margin:9px 0 5px;text-transform:uppercase}
     .fa-list{display:flex;flex-wrap:wrap;gap:3px}.fa{background:var(--fa-bg);color:var(--fa);font-size:8px;padding:4px 5px;border-radius:3px}.fa.q{background:var(--amber-bg);color:var(--amber)}
     .empty,.club-filter-empty{font-size:9px;color:var(--muted);padding:5px 0;line-height:1.45}
@@ -72,16 +73,16 @@
         <div class="clock"><div><b id="dd">--</b><span>天</span></div><div><b id="hh">--</b><span>时</span></div><div><b id="mm">--</b><span>分</span></div><div><b id="ss">--</b><span>秒</span></div></div>
       </div>
     </header>
-    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">94</b><span>截图 owned</span></div><div class="stat"><b id="q-count">6</b><span>GTD owned</span></div><div class="stat"><b id="fa-count">126</b><span>FA预计首发</span></div></div>
+    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">98</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">3</b><span>替补 / IR</span></div><div class="stat"><b id="fa-count">125</b><span>FA预计首发</span></div></div>
     <nav class="toolbar" aria-label="经理筛选"><div class="filters" id="filters"></div></nav>
     <main>
-      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。FA 候选指“不在本次截图的 94 名 owned 名单中、且进入 Rotowire 预测首发”的球员；正式认领前仍需在 Sleeper 复核 owner。</div>
+      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已按 9 月 28 日交易更新；每支球队同时列出“预计首发”和“owned但预测替补 / IR”。FA 候选仍需在 Sleeper 复核 owner。</div>
       <div id="matches"></div>
       <section class="legend">
         <h2>状态与经理颜色</h2>
-        <div class="legend-row"><span class="key status start">预计首发</span><span class="key status q">预计首发 · GTD</span><span class="key status out">OUT</span><span class="key status sus">停赛</span><span class="key fa">FA预计首发</span></div>
+        <div class="legend-row"><span class="key status start">预计首发</span><span class="key status q">预计首发 · GTD</span><span class="key status bench">预测替补</span><span class="key status ir">IR / OUT</span><span class="key fa">FA预计首发</span></div>
         <div class="owners" id="owner-legend"></div>
-        <p>数据快照：2026-09-23。比赛时间采用北京时间。距离开赛仍有较长国际比赛日窗口，伤病和轮换变化会比较大。</p>
+        <p>数据快照：2026-09-28。比赛时间采用北京时间。距离开赛仍有国际比赛日窗口，伤病和轮换预测会继续变化。</p>
       </section>
     </main>
     <footer>赛程：<a href="https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-202627-premier-league-season" target="_blank" rel="noopener">PremierLeague.com</a> · 阵容与状态：<a href="https://www.rotowire.com/soccer/lineups.php?week=36" target="_blank" rel="noopener">RotoWire EPL Lineups</a></footer>
@@ -93,14 +94,19 @@
       grit50:{label:'Team grit50',color:'#667085'}, scofield666:{label:'天呐，她',color:'#d94678'}
     };
     const owned={
-      'A. Semenyo':'ACWSZM','M. Rashford':'ACWSZM','Rayan Cherki':'ACWSZM','I. Ndiaye':'ACWSZM','Y. Tielemans':'ACWSZM','Kevin Schade':'ACWSZM','E. Anderson':'ACWSZM','Alex Scott':'ACWSZM','G. Donnarumma':'ACWSZM','H. Maguire':'ACWSZM','Nobel Mendy':'ACWSZM','Ruben Dias':'ACWSZM','Jayden Bogle':'ACWSZM',
+      'A. Semenyo':'ACWSZM','M. Rashford':'ACWSZM','Rayan Cherki':'ACWSZM','I. Ndiaye':'ACWSZM','Y. Tielemans':'ACWSZM','Kevin Schade':'ACWSZM','E. Anderson':'ACWSZM','Alex Scott':'ACWSZM','G. Donnarumma':'ACWSZM','H. Maguire':'ACWSZM','Nobel Mendy':'ACWSZM','Ruben Dias':'ACWSZM','Jayden Bogle':'ACWSZM','Viktor Gyokeres':'ACWSZM',
       'B. Barcola':'scofield666','Matheus Cunha':'scofield666','Gonzalo Garcia':'scofield666','Cody Gakpo':'scofield666','T. Barry':'scofield666','E. Fernandez':'scofield666','J. Manzambi':'scofield666','Declan Rice':'scofield666','Pedro Neto':'scofield666','Enzo Le Fee':'scofield666','Julio Enciso':'scofield666','N. Mukiele':'scofield666','V. van Dijk':'scofield666','C. Kelleher':'scofield666','T. Muharemovic':'scofield666','V. Mykolenko':'scofield666','A. Truffert':'scofield666',
       'D. Calvert-Lewin':'Showmader','Igor Thiago':'Showmader','Bruno Fernandes':'Showmader','Bryan Mbeumo':'Showmader','M. Gibbs-White':'Showmader','Diego Gomez':'Showmader','K. Dewsbury-Hall':'Showmader','H. Barnes':'Showmader','Pascal Gross':'Showmader','James Garner':'Showmader','J. Tarkowski':'Showmader','Daniel Munoz':'Showmader','R. Araujo':'Showmader','V. Janelt':'Showmader','Lewis Hall':'Showmader','E. Martinez':'Showmader',
-      'E. Haaland':'MHerbaut','M. Belloumi':'MHerbaut','O. McBurnie':'MHerbaut','C. Tzolis':'MHerbaut','F. Wirtz':'MHerbaut','M. Odegaard':'MHerbaut','M. Kudus':'MHerbaut','Gabriel':'MHerbaut','James McAtee':'MHerbaut','A. Khalaili':'MHerbaut','N. Williams':'MHerbaut','David Raya':'MHerbaut','Sven Botman':'MHerbaut','J. Gvardiol':'MHerbaut','Malick Thiaw':'MHerbaut','Ethan Ampadu':'MHerbaut',
-      'Kai Havertz':'grit50','Bukayo Saka':'grit50','A. Isak':'grit50','Bruno Guimaraes':'grit50','D. Szoboszlai':'grit50','Anton Stach':'grit50','M. Tavernier':'grit50','Alex Iwobi':'grit50','Liam Delap':'grit50','R. Calafiori':'grit50','K. Lewis-Potter':'grit50','Reece James':'grit50','A. Robinson':'grit50','J. Pickford':'grit50','M. De Cuyper':'grit50','Murillo':'grit50','Matheus Nunes':'grit50',
-      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','M. Lacroix':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe'
+      'E. Haaland':'MHerbaut','M. Belloumi':'MHerbaut','O. McBurnie':'MHerbaut','C. Tzolis':'MHerbaut','F. Wirtz':'MHerbaut','M. Odegaard':'MHerbaut','M. Kudus':'MHerbaut','Gabriel':'MHerbaut','James McAtee':'MHerbaut','A. Khalaili':'MHerbaut','N. Williams':'MHerbaut','David Raya':'MHerbaut','Sven Botman':'MHerbaut','J. Gvardiol':'MHerbaut','Malick Thiaw':'MHerbaut','Ethan Ampadu':'MHerbaut','Granit Xhaka':'MHerbaut','Hugo Ekitike':'MHerbaut','Leon Goretzka':'MHerbaut',
+      'Kai Havertz':'grit50','Bukayo Saka':'grit50','A. Isak':'grit50','Bruno Guimaraes':'grit50','D. Szoboszlai':'grit50','Anton Stach':'grit50','M. Tavernier':'grit50','Alex Iwobi':'grit50','R. Calafiori':'grit50','K. Lewis-Potter':'grit50','Reece James':'grit50','A. Robinson':'grit50','J. Pickford':'grit50','M. De Cuyper':'grit50','Murillo':'grit50','Matheus Nunes':'grit50','K. Ajer':'grit50',
+      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','K. Tzolakis':'CooperGe'
     };
-    const q=new Set(['A. Semenyo','M. Rashford','Nobel Mendy','Declan Rice','Cole Palmer','Reece James']);
+    const q=new Set(['A. Semenyo','M. Rashford','Nobel Mendy','Declan Rice','Cole Palmer','Reece James','Kai Havertz','A. Isak','Cody Gakpo']);
+    const reserves={
+      ARS:[['Viktor Gyokeres','F','ACWSZM','bench','Havertz腿后侧伤势GTD；存在递补首发窗口']],
+      AVL:[['Leon Goretzka','M','MHerbaut','out','膝伤 · Rotowire标为OUT，预计10月10日前后复评']],
+      LIV:[['Hugo Ekitike','F','MHerbaut','ir','跟腱伤 · 预计2027年1月复出']]
+    };
     const teams={
       ARS:['Arsenal',[['David Raya','GK'],['R. Calafiori','DL'],['Ezri Konsa','DC'],['Gabriel','DC'],['J. Timber','DR'],['Declan Rice','DMC'],['Bruno Guimaraes','DMC'],['C. Tzolis','AML'],['M. Odegaard','AMC'],['Bukayo Saka','AMR'],['Kai Havertz','FW']]],
       LEE:['Leeds United',[['J. Trafford','GK'],['James Justin','DC'],['Nico Elvedi','DC'],['T. Muharemovic','DC'],['G. Gudmundsson','ML'],['Ethan Ampadu','MC'],['Ao Tanaka','MC'],['Jayden Bogle','MR'],['Noah Okafor','AMC'],['Anton Stach','AMC'],['D. Calvert-Lewin','FW']]],
@@ -123,7 +129,7 @@
       COV:['Coventry City',[['C. Rushworth','GK'],['S. Mfuni','DC'],['Bobby Thomas','DC'],['E. Pinnock','DC'],['Jay Dasilva','ML'],['Frank Onyeka','MC'],['Matt Grimes','MC'],['M. van Ewijk','MR'],['L. Tchaouna','AMC'],['Jack Rudoni','AMC'],['B. Thomas-Asante','FW']]],
       NEW:['Newcastle United',[['L. Hornicek','GK'],['Lewis Hall','DL'],['Malick Thiaw','DC'],['Sven Botman','DC'],['Amar Dedic','DR'],['Nico Gonzalez','DMC'],['Lewis Miley','DMC'],['H. Barnes','AML'],['Yoane Wissa','AMC'],['Jacob Murphy','AMR'],['M. Fernandez-Pardo','FW']]]
     };
-    const extraQ=new Set(['Lewis Dunk','Matty Cash','Joao Gomes','M. Caicedo','K. Mainoo','D. Henderson','N. Milenkovic','Amar Dedic','Nico Gonzalez','M. van Ewijk']);
+    const extraQ=new Set(['Lewis Dunk','Matty Cash','Joao Gomes','M. Caicedo','K. Mainoo','D. Henderson','N. Milenkovic','Amar Dedic','Nico Gonzalez','M. van Ewijk','D. Ballard','B. Brobbey']);
     const fixtures=[
       ['10月10日 周六','19:30','ARS','LEE'],['10月10日 周六','22:00','AVL','BRE'],['10月10日 周六','22:00','CHE','BOU'],['10月10日 周六','22:00','IPS','FUL'],['10月10日 周六','22:00','SUN','BHA'],
       ['10月11日 周日','00:30','MUN','TOT'],['10月11日 周日','21:00','CRY','NFO'],['10月11日 周日','21:00','HUL','EVE'],['10月11日 周日','23:30','LIV','MCI'],['10月13日 周二','03:00','COV','NEW']
@@ -133,13 +139,14 @@
     filters.innerHTML=filterOptions.map(([k,l],i)=>`<button class="filter ${i===0?'active':''}" data-owner="${k}" type="button">${l}</button>`).join('');
     document.getElementById('owner-legend').innerHTML=Object.entries(owners).map(([k,v])=>`<span class="owner-key"><i class="dot" style="background:${v.color}"></i>${k}</span>`).join('');
     function teamHTML(code){
-      const [name,xi]=teams[code]; const own=xi.filter(x=>owned[x[0]]); const free=xi.filter(x=>!owned[x[0]]);
+      const [name,xi]=teams[code]; const own=xi.filter(x=>owned[x[0]]); const free=xi.filter(x=>!owned[x[0]]); const reserve=reserves[code]||[];
       const ownHTML=own.length?own.map(([n,pos])=>{const o=owned[n],info=owners[o],isQ=q.has(n);return `<div class="player" data-owner="${o}" style="--owner-color:${info.color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div></div><span class="status ${isQ?'q':'start'}">${isQ?'预计首发 · GTD':'预计首发'}</span></div>`}).join(''):`<div class="empty">无截图 owned 球员进入预测首发</div>`;
+      const reserveHTML=reserve.length?`<div class="reserve-title">OWNED · 预测替补 / IR</div><div class="reserve-list">${reserve.map(([n,pos,o,s,note])=>`<div class="player reserve-player ${s==='ir'||s==='out'?'ir-row':''}" data-owner="${o}" style="--owner-color:${owners[o].color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div><div class="reserve-note">${note}</div></div><span class="status ${s==='bench'?'bench':'ir'}">${s==='bench'?'预测替补':'IR / OUT'}</span></div>`).join('')}</div>`:'';
       const faHTML=free.length?free.map(([n,pos])=>`<span class="fa ${extraQ.has(n)?'q':''}">${n} · ${pos}${extraQ.has(n)?' · GTD':''}</span>`).join(''):`<span class="empty">预测首发 11 人已全部被 own</span>`;
-      return `<section class="club" data-owned-total="${own.length}" data-fa-total="${free.length}"><div class="club-head"><div class="club-id"><span class="badge-team">${code}</span><div><div class="club-name">${name}</div><div class="club-count">${own.length} owned · ${free.length} FA预计</div></div></div></div><div class="owned">${ownHTML}<div class="club-filter-empty hidden">该经理在此队无球员</div></div><div class="fa-title">FA · Rotowire预计首发</div><div class="fa-list">${faHTML}</div></section>`;
+      return `<section class="club" data-owned-total="${own.length}" data-reserve-total="${reserve.length}" data-fa-total="${free.length}"><div class="club-head"><div class="club-id"><span class="badge-team">${code}</span><div><div class="club-name">${name}</div><div class="club-count">${own.length} 首发 · ${reserve.length} 替补/IR · ${free.length} FA</div></div></div></div><div class="owned">${ownHTML}<div class="club-filter-empty hidden">该经理在此队无球员</div></div>${reserveHTML}<div class="fa-title">FA · Rotowire预计首发</div><div class="fa-list">${faHTML}</div></section>`;
     }
     let lastDay='';
-    document.getElementById('matches').innerHTML=fixtures.map(([day,time,a,b],i)=>{const dayHead=day!==lastDay?`<div class="day">${day}</div>`:'';lastDay=day;const present=new Set([...teams[a][1],...teams[b][1]].map(x=>owned[x[0]]).filter(Boolean));return `${dayHead}<article class="match" data-owners="${[...present].join(' ')}"><div class="match-head"><span class="kick">北京时间 ${time}</span><span class="pair">${a} <span style="color:#98a2b3">vs</span> ${b}</span></div>${teamHTML(a)}${teamHTML(b)}</article>`}).join('');
+    document.getElementById('matches').innerHTML=fixtures.map(([day,time,a,b],i)=>{const dayHead=day!==lastDay?`<div class="day">${day}</div>`:'';lastDay=day;const present=new Set([...teams[a][1],...teams[b][1],...(reserves[a]||[]),...(reserves[b]||[])].map(x=>owned[x[0]]||x[2]).filter(Boolean));return `${dayHead}<article class="match" data-owners="${[...present].join(' ')}"><div class="match-head"><span class="kick">北京时间 ${time}</span><span class="pair">${a} <span style="color:#98a2b3">vs</span> ${b}</span></div>${teamHTML(a)}${teamHTML(b)}</article>`}).join('');
     filters.addEventListener('click',e=>{
       const btn=e.target.closest('.filter');if(!btn)return;
       document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===btn));
@@ -147,13 +154,14 @@
       document.querySelectorAll('.match').forEach(m=>{
         const matchVisible=v==='all'||m.dataset.owners.split(' ').includes(v);
         m.classList.toggle('hidden',!matchVisible);
-        m.querySelectorAll('.player').forEach(p=>p.classList.toggle('hidden',v!=='all'&&p.dataset.owner!==v));
-        m.querySelectorAll('.club').forEach(c=>{
-          const selectedCount=v==='all'?Number(c.dataset.ownedTotal):[...c.querySelectorAll('.player')].filter(p=>p.dataset.owner===v).length;
+          m.querySelectorAll('.player').forEach(p=>p.classList.toggle('hidden',v!=='all'&&p.dataset.owner!==v));
+          m.querySelectorAll('.club').forEach(c=>{
+          const selectedCount=v==='all'?Number(c.dataset.ownedTotal)+Number(c.dataset.reserveTotal):[...c.querySelectorAll('.player')].filter(p=>p.dataset.owner===v).length;
           c.querySelector('.club-filter-empty').classList.toggle('hidden',v==='all'||selectedCount>0);
+          const reserveTitle=c.querySelector('.reserve-title'); if(reserveTitle) reserveTitle.classList.toggle('hidden',v!=='all'&&!c.querySelector('.reserve-list .player:not(.hidden)'));
           c.querySelector('.fa-title').classList.toggle('hidden',v!=='all');
           c.querySelector('.fa-list').classList.toggle('hidden',v!=='all');
-          c.querySelector('.club-count').textContent=v==='all'?`${c.dataset.ownedTotal} owned · ${c.dataset.faTotal} FA预计`:`${selectedCount} 名 ${v} 球员`;
+          c.querySelector('.club-count').textContent=v==='all'?`${c.dataset.ownedTotal} 首发 · ${c.dataset.reserveTotal} 替补/IR · ${c.dataset.faTotal} FA`:`${selectedCount} 名 ${v} 球员`;
         });
       });
       document.querySelectorAll('.day').forEach(d=>{let n=d.nextElementSibling,show=false;while(n&&n.classList.contains('match')){if(!n.classList.contains('hidden'))show=true;n=n.nextElementSibling}d.classList.toggle('hidden',!show)});
@@ -161,7 +169,7 @@
     const target=new Date('2026-10-10T19:30:00+08:00').getTime();
     function tick(){let left=Math.max(0,target-Date.now());const d=Math.floor(left/86400000);left%=86400000;const h=Math.floor(left/3600000);left%=3600000;const m=Math.floor(left/60000);const s=Math.floor((left%60000)/1000);for(const [id,v] of [['dd',d],['hh',h],['mm',m],['ss',s]])document.getElementById(id).textContent=String(v).padStart(2,'0')}
     tick();setInterval(tick,1000);
-    const ownedCount=Object.keys(owned).length;const qOwned=[...q].filter(x=>owned[x]).length;document.getElementById('owned-count').textContent=ownedCount;document.getElementById('q-count').textContent=qOwned;document.getElementById('fa-count').textContent=220-ownedCount;
+    const reserveCount=Object.values(reserves).flat().length;const starterCount=Object.keys(owned).length-reserveCount;document.getElementById('owned-count').textContent=Object.keys(owned).length;document.getElementById('reserve-count').textContent=reserveCount;document.getElementById('fa-count').textContent=220-starterCount;
   </script>
 </body>
 </html>
