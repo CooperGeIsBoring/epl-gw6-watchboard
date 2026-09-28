@@ -73,7 +73,7 @@
         <div class="clock"><div><b id="dd">--</b><span>天</span></div><div><b id="hh">--</b><span>时</span></div><div><b id="mm">--</b><span>分</span></div><div><b id="ss">--</b><span>秒</span></div></div>
       </div>
     </header>
-    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">98</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">3</b><span>替补 / IR</span></div><div class="stat"><b id="fa-count">125</b><span>FA预计首发</span></div></div>
+    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">99</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">4</b><span>替补 / 伤停</span></div><div class="stat"><b id="fa-count">125</b><span>FA预计首发</span></div></div>
     <nav class="toolbar" aria-label="经理筛选"><div class="filters" id="filters"></div></nav>
     <main>
       <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已按 9 月 28 日交易更新；每支球队同时列出“预计首发”和“owned但预测替补 / IR”。FA 候选仍需在 Sleeper 复核 owner。</div>
@@ -99,12 +99,13 @@
       'D. Calvert-Lewin':'Showmader','Igor Thiago':'Showmader','Bruno Fernandes':'Showmader','Bryan Mbeumo':'Showmader','M. Gibbs-White':'Showmader','Diego Gomez':'Showmader','K. Dewsbury-Hall':'Showmader','H. Barnes':'Showmader','Pascal Gross':'Showmader','James Garner':'Showmader','J. Tarkowski':'Showmader','Daniel Munoz':'Showmader','R. Araujo':'Showmader','V. Janelt':'Showmader','Lewis Hall':'Showmader','E. Martinez':'Showmader',
       'E. Haaland':'MHerbaut','M. Belloumi':'MHerbaut','O. McBurnie':'MHerbaut','C. Tzolis':'MHerbaut','F. Wirtz':'MHerbaut','M. Odegaard':'MHerbaut','M. Kudus':'MHerbaut','Gabriel':'MHerbaut','James McAtee':'MHerbaut','A. Khalaili':'MHerbaut','N. Williams':'MHerbaut','David Raya':'MHerbaut','Sven Botman':'MHerbaut','J. Gvardiol':'MHerbaut','Malick Thiaw':'MHerbaut','Ethan Ampadu':'MHerbaut','Granit Xhaka':'MHerbaut','Hugo Ekitike':'MHerbaut','Leon Goretzka':'MHerbaut',
       'Kai Havertz':'grit50','Bukayo Saka':'grit50','A. Isak':'grit50','Bruno Guimaraes':'grit50','D. Szoboszlai':'grit50','Anton Stach':'grit50','M. Tavernier':'grit50','Alex Iwobi':'grit50','R. Calafiori':'grit50','K. Lewis-Potter':'grit50','Reece James':'grit50','A. Robinson':'grit50','J. Pickford':'grit50','M. De Cuyper':'grit50','Murillo':'grit50','Matheus Nunes':'grit50','K. Ajer':'grit50',
-      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','K. Tzolakis':'CooperGe'
+      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','Joao Pedro':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','K. Tzolakis':'CooperGe'
     };
     const q=new Set(['A. Semenyo','M. Rashford','Nobel Mendy','Declan Rice','Cole Palmer','Reece James','Kai Havertz','A. Isak','Cody Gakpo']);
     const reserves={
       ARS:[['Viktor Gyokeres','F','ACWSZM','bench','Havertz腿后侧伤势GTD；存在递补首发窗口']],
       AVL:[['Leon Goretzka','M','MHerbaut','out','膝伤 · Rotowire标为OUT，预计10月10日前后复评']],
+      CHE:[['Joao Pedro','F','CooperGe','gtd','膝伤水肿 · 目标10月10日复出；当前预测首发为Welbeck']],
       LIV:[['Hugo Ekitike','F','MHerbaut','ir','跟腱伤 · 预计2027年1月复出']]
     };
     const teams={
@@ -141,7 +142,7 @@
     function teamHTML(code){
       const [name,xi]=teams[code]; const own=xi.filter(x=>owned[x[0]]); const free=xi.filter(x=>!owned[x[0]]); const reserve=reserves[code]||[];
       const ownHTML=own.length?own.map(([n,pos])=>{const o=owned[n],info=owners[o],isQ=q.has(n);return `<div class="player" data-owner="${o}" style="--owner-color:${info.color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div></div><span class="status ${isQ?'q':'start'}">${isQ?'预计首发 · GTD':'预计首发'}</span></div>`}).join(''):`<div class="empty">无截图 owned 球员进入预测首发</div>`;
-      const reserveHTML=reserve.length?`<div class="reserve-title">OWNED · 预测替补 / IR</div><div class="reserve-list">${reserve.map(([n,pos,o,s,note])=>`<div class="player reserve-player ${s==='ir'||s==='out'?'ir-row':''}" data-owner="${o}" style="--owner-color:${owners[o].color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div><div class="reserve-note">${note}</div></div><span class="status ${s==='bench'?'bench':'ir'}">${s==='bench'?'预测替补':'IR / OUT'}</span></div>`).join('')}</div>`:'';
+      const reserveHTML=reserve.length?`<div class="reserve-title">OWNED · 预测替补 / 伤停</div><div class="reserve-list">${reserve.map(([n,pos,o,s,note])=>`<div class="player reserve-player ${s==='ir'||s==='out'?'ir-row':''}" data-owner="${o}" style="--owner-color:${owners[o].color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div><div class="reserve-note">${note}</div></div><span class="status ${s==='bench'?'bench':s==='gtd'?'q':'ir'}">${s==='bench'?'预测替补':s==='gtd'?'GTD':'IR / OUT'}</span></div>`).join('')}</div>`:'';
       const faHTML=free.length?free.map(([n,pos])=>`<span class="fa ${extraQ.has(n)?'q':''}">${n} · ${pos}${extraQ.has(n)?' · GTD':''}</span>`).join(''):`<span class="empty">预测首发 11 人已全部被 own</span>`;
       return `<section class="club" data-owned-total="${own.length}" data-reserve-total="${reserve.length}" data-fa-total="${free.length}"><div class="club-head"><div class="club-id"><span class="badge-team">${code}</span><div><div class="club-name">${name}</div><div class="club-count">${own.length} 首发 · ${reserve.length} 替补/IR · ${free.length} FA</div></div></div></div><div class="owned">${ownHTML}<div class="club-filter-empty hidden">该经理在此队无球员</div></div>${reserveHTML}<div class="fa-title">FA · Rotowire预计首发</div><div class="fa-list">${faHTML}</div></section>`;
     }
