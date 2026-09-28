@@ -35,6 +35,10 @@
     .filter.active{background:var(--navy);color:#fff;border-color:var(--navy)}
     main{padding:14px 10px 34px}
     .notice{background:#e4f7f8;color:#075a63;border-left:4px solid var(--cyan);padding:10px 11px;border-radius:4px;font-size:11px;line-height:1.55;margin-bottom:13px}
+    .module{background:#fff;border:1px solid var(--line);border-radius:8px;margin-bottom:14px;overflow:hidden}.module-head{padding:11px 12px;background:#f0f3f7;display:flex;align-items:center;justify-content:space-between;gap:8px}.module-head h2{font-size:14px;margin:0}.module-head span{font-size:9px;color:var(--muted)}
+    .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:9px}.action-item{padding:8px;border-radius:5px;background:#f7f9fb;border-left:3px solid var(--owner-color)}.action-top{display:flex;justify-content:space-between;align-items:center;gap:5px}.action-name{font-size:10px;font-weight:900;overflow-wrap:anywhere}.action-meta{font-size:8px;color:var(--muted);margin-top:3px;line-height:1.4}.action-empty{padding:14px;text-align:center;color:var(--muted);font-size:10px}
+    .radar-controls{display:flex;gap:4px;padding:8px 9px 0}.radar-filter{border:1px solid var(--line);background:#fff;border-radius:4px;padding:5px 8px;font-size:9px;font-weight:800;color:#526075}.radar-filter.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .radar-list{padding:7px 9px 10px}.radar-row{display:grid;grid-template-columns:22px minmax(0,1fr) 42px 42px;gap:6px;align-items:center;padding:7px 2px;border-top:1px solid #edf0f4}.radar-row:first-child{border-top:0}.radar-rank{font-size:9px;color:var(--muted);font-weight:800;text-align:center}.radar-name{font-size:10px;font-weight:900}.radar-meta{font-size:8px;color:var(--muted);margin-top:2px}.radar-num{text-align:right}.radar-num b{display:block;font-size:11px}.radar-num span{display:block;font-size:7px;color:var(--muted);margin-top:1px}.radar-note{padding:0 11px 10px;color:var(--muted);font-size:8px;line-height:1.5}
     .day{margin:17px 2px 7px;font-size:12px;color:#566176;font-weight:900}
     .match{background:#fff;border:1px solid var(--line);border-radius:8px;margin-bottom:9px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
     .match-head{grid-column:1/-1;padding:10px 11px;background:#f0f3f7;display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -77,6 +81,17 @@
     <nav class="toolbar" aria-label="经理筛选"><div class="filters" id="filters"></div></nav>
     <main>
       <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已按 9 月 28 日交易更新；每支球队同时列出“预计首发”和“owned但预测替补 / IR”。FA 候选仍需在 Sleeper 复核 owner。</div>
+      <section class="module action-center" id="action-center">
+        <div class="module-head"><h2>本轮操作中心</h2><span><b id="action-count">13</b> 项需关注</span></div>
+        <div class="action-grid" id="action-items"></div>
+        <div class="action-empty hidden" id="action-empty">该经理当前没有GTD、预测替补或IR球员</div>
+      </section>
+      <section class="module fa-radar" id="fa-radar">
+        <div class="module-head"><h2>FA雷达</h2><span>每位置Top 5 · Rotowire Sleeper投影</span></div>
+        <div class="radar-controls" id="radar-controls"><button class="radar-filter active" data-pos="all" type="button">全部</button><button class="radar-filter" data-pos="F" type="button">F</button><button class="radar-filter" data-pos="M" type="button">M</button><button class="radar-filter" data-pos="D" type="button">D</button><button class="radar-filter" data-pos="G" type="button">G</button></div>
+        <div class="radar-list" id="radar-list"></div>
+        <div class="radar-note">按Rotowire 9月25日Fantrax/Sleeper GW6排名，从当前预计首发FA中按位置各取前5；伤停标签采用9月28日快照。投影会随首发预测变化。</div>
+      </section>
       <div id="matches"></div>
       <section class="legend">
         <h2>状态与经理颜色</h2>
@@ -108,6 +123,27 @@
       CHE:[['Joao Pedro','F','CooperGe','gtd','膝伤水肿 · 目标10月10日复出；当前预测首发为Welbeck']],
       LIV:[['Hugo Ekitike','F','MHerbaut','ir','跟腱伤 · 预计2027年1月复出']]
     };
+    const actionItems=[
+      ['MHerbaut','Hugo Ekitike','LIV','IR','跟腱伤，预计2027年1月复出','ir'],
+      ['MHerbaut','Leon Goretzka','AVL','OUT','膝伤，预计10月10日前后复评','out'],
+      ['CooperGe','Joao Pedro','CHE','GTD','当前未进预测首发，目标本轮复出','q'],
+      ['ACWSZM','Viktor Gyokeres','ARS','替补','Havertz GTD，可能递补首发','bench'],
+      ['CooperGe','Cole Palmer','CHE','GTD','仍在Rotowire预测首发','q'],
+      ['grit50','Kai Havertz','ARS','GTD','腿后侧伤势，仍在预测首发','q'],
+      ['grit50','A. Isak','LIV','GTD','大腿轻伤，仍在预测首发','q'],
+      ['grit50','Reece James','CHE','GTD','仍在预测首发','q'],
+      ['scofield666','Cody Gakpo','LIV','GTD','国家队比赛腿伤，仍在预测首发','q'],
+      ['scofield666','Declan Rice','ARS','GTD','退出国家队，仍在预测首发','q'],
+      ['ACWSZM','A. Semenyo','MCI','GTD','脚踝问题，仍在预测首发','q'],
+      ['ACWSZM','M. Rashford','MUN','GTD','仍在预测首发','q'],
+      ['ACWSZM','Nobel Mendy','HUL','GTD','仍在预测首发','q']
+    ];
+    const faRadar=[
+      ['F','Danny Welbeck','CHE','vs BOU',10.01,5.54,''],['F','Yoane Wissa','NEW','at COV',9.19,6.36,''],['F','Nicolas Jackson','AVL','vs BRE',8.98,5.49,''],['F','Liam Delap','NFO','at CRY',8.89,5.53,''],['F','Evanilson','BOU','at CHE',8.86,5.26,''],
+      ['M','Emiliano Buendia','AVL','vs BRE',10.66,7.63,''],['M','John McGinn','AVL','vs BRE',9.90,7.48,''],['M','Jaden Philogene','IPS','vs FUL',8.80,6.00,''],['M','Jack Rudoni','COV','vs NEW',8.80,6.16,''],['M','Jacob Murphy','NEW','at COV',8.61,5.84,''],
+      ['D','Jurrien Timber','ARS','vs LEE',8.73,5.33,''],['D','Daniel Ballard','SUN','vs BHA',8.40,6.95,'GTD'],['D','Honest Ahanor','CRY','vs NFO',8.34,6.65,''],['D','Diogo Dalot','MUN','vs TOT',8.22,5.88,''],['D','Ezri Konsa','ARS','vs LEE',8.18,5.18,''],
+      ['G','Dean Henderson','CRY','vs NFO',6.46,4.65,'GTD'],['G','Matz Sels','NFO','at CRY',5.83,3.88,''],['G','Antonin Kinsky','TOT','at MUN',5.76,4.79,''],['G','Senne Lammens','MUN','vs TOT',5.47,2.86,''],['G','Robin Roefs','SUN','vs BHA',5.28,3.58,'']
+    ];
     const teams={
       ARS:['Arsenal',[['David Raya','GK'],['R. Calafiori','DL'],['Ezri Konsa','DC'],['Gabriel','DC'],['J. Timber','DR'],['Declan Rice','DMC'],['Bruno Guimaraes','DMC'],['C. Tzolis','AML'],['M. Odegaard','AMC'],['Bukayo Saka','AMR'],['Kai Havertz','FW']]],
       LEE:['Leeds United',[['J. Trafford','GK'],['James Justin','DC'],['Nico Elvedi','DC'],['T. Muharemovic','DC'],['G. Gudmundsson','ML'],['Ethan Ampadu','MC'],['Ao Tanaka','MC'],['Jayden Bogle','MR'],['Noah Okafor','AMC'],['Anton Stach','AMC'],['D. Calvert-Lewin','FW']]],
@@ -139,6 +175,18 @@
     const filterOptions=[['all','全部'],...Object.entries(owners).map(([k,v])=>[k,k])];
     filters.innerHTML=filterOptions.map(([k,l],i)=>`<button class="filter ${i===0?'active':''}" data-owner="${k}" type="button">${l}</button>`).join('');
     document.getElementById('owner-legend').innerHTML=Object.entries(owners).map(([k,v])=>`<span class="owner-key"><i class="dot" style="background:${v.color}"></i>${k}</span>`).join('');
+    function renderActions(owner='all'){
+      const rows=actionItems.filter(x=>owner==='all'||x[0]===owner);
+      document.getElementById('action-count').textContent=rows.length;
+      document.getElementById('action-empty').classList.toggle('hidden',rows.length>0);
+      document.getElementById('action-items').innerHTML=rows.map(([o,n,club,label,note,type])=>`<div class="action-item" data-owner="${o}" style="--owner-color:${owners[o].color}"><div class="action-top"><div class="action-name">${n}</div><span class="status ${type}">${label}</span></div><div class="action-meta">${club} · ${o}<br>${note}</div></div>`).join('');
+    }
+    function renderRadar(pos='all'){
+      const rows=faRadar.filter(x=>pos==='all'||x[0]===pos).sort((a,b)=>b[4]-a[4]);
+      document.getElementById('radar-list').innerHTML=rows.map(([p,n,club,opp,pts,floor,flag],i)=>`<div class="radar-row" data-pos="${p}"><div class="radar-rank">${i+1}</div><div><div class="radar-name">${n}${flag?` <span class="status q">${flag}</span>`:''}</div><div class="radar-meta">${p} · ${club} ${opp}</div></div><div class="radar-num"><b>${pts.toFixed(2)}</b><span>投影</span></div><div class="radar-num"><b>${floor.toFixed(2)}</b><span>floor</span></div></div>`).join('');
+    }
+    renderActions();renderRadar();
+    document.getElementById('radar-controls').addEventListener('click',e=>{const b=e.target.closest('.radar-filter');if(!b)return;document.querySelectorAll('.radar-filter').forEach(x=>x.classList.toggle('active',x===b));renderRadar(b.dataset.pos)});
     function teamHTML(code){
       const [name,xi]=teams[code]; const own=xi.filter(x=>owned[x[0]]); const free=xi.filter(x=>!owned[x[0]]); const reserve=reserves[code]||[];
       const ownHTML=own.length?own.map(([n,pos])=>{const o=owned[n],info=owners[o],isQ=q.has(n);return `<div class="player" data-owner="${o}" style="--owner-color:${info.color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div></div><span class="status ${isQ?'q':'start'}">${isQ?'预计首发 · GTD':'预计首发'}</span></div>`}).join(''):`<div class="empty">无截图 owned 球员进入预测首发</div>`;
@@ -152,6 +200,8 @@
       const btn=e.target.closest('.filter');if(!btn)return;
       document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===btn));
       const v=btn.dataset.owner;
+      renderActions(v);
+      document.getElementById('fa-radar').classList.toggle('hidden',v!=='all');
       document.querySelectorAll('.match').forEach(m=>{
         const matchVisible=v==='all'||m.dataset.owners.split(' ').includes(v);
         m.classList.toggle('hidden',!matchVisible);
