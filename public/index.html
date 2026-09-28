@@ -39,6 +39,7 @@
     .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:9px}.action-item{padding:8px;border-radius:5px;background:#f7f9fb;border-left:3px solid var(--owner-color)}.action-top{display:flex;justify-content:space-between;align-items:center;gap:5px}.action-name{font-size:10px;font-weight:900;overflow-wrap:anywhere}.action-meta{font-size:8px;color:var(--muted);margin-top:3px;line-height:1.4}.action-empty{padding:14px;text-align:center;color:var(--muted);font-size:10px}
     .radar-controls{display:flex;gap:4px;padding:8px 9px 0}.radar-filter{border:1px solid var(--line);background:#fff;border-radius:4px;padding:5px 8px;font-size:9px;font-weight:800;color:#526075}.radar-filter.active{background:var(--navy);color:#fff;border-color:var(--navy)}
     .radar-list{padding:7px 9px 10px}.radar-row{display:grid;grid-template-columns:22px minmax(0,1fr) 42px 42px;gap:6px;align-items:center;padding:7px 2px;border-top:1px solid #edf0f4}.radar-row:first-child{border-top:0}.radar-rank{font-size:9px;color:var(--muted);font-weight:800;text-align:center}.radar-name{font-size:10px;font-weight:900}.radar-meta{font-size:8px;color:var(--muted);margin-top:2px}.radar-num{text-align:right}.radar-num b{display:block;font-size:11px}.radar-num span{display:block;font-size:7px;color:var(--muted);margin-top:1px}.radar-note{padding:0 11px 10px;color:var(--muted);font-size:8px;line-height:1.5}
+    .radar-pager{display:flex;align-items:center;justify-content:center;gap:10px;padding:0 9px 9px}.pager-btn{border:1px solid var(--line);background:#fff;color:#475467;border-radius:4px;padding:5px 9px;font-size:9px;font-weight:800}.pager-btn:disabled{opacity:.35}.page-state{font-size:9px;color:var(--muted);min-width:40px;text-align:center}
     .day{margin:17px 2px 7px;font-size:12px;color:#566176;font-weight:900}
     .match{background:#fff;border:1px solid var(--line);border-radius:8px;margin-bottom:9px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
     .match-head{grid-column:1/-1;padding:10px 11px;background:#f0f3f7;display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -82,15 +83,16 @@
     <main>
       <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已按 9 月 28 日交易更新；每支球队同时列出“预计首发”和“owned但预测替补 / IR”。FA 候选仍需在 Sleeper 复核 owner。</div>
       <section class="module action-center" id="action-center">
-        <div class="module-head"><h2>本轮操作中心</h2><span><b id="action-count">13</b> 项需关注</span></div>
+        <div class="module-head"><h2>关注球员</h2><span><b id="action-count">13</b> 人需关注</span></div>
         <div class="action-grid" id="action-items"></div>
         <div class="action-empty hidden" id="action-empty">该经理当前没有GTD、预测替补或IR球员</div>
       </section>
       <section class="module fa-radar" id="fa-radar">
-        <div class="module-head"><h2>FA雷达</h2><span>每位置Top 5 · Rotowire Sleeper投影</span></div>
+        <div class="module-head"><h2>FA雷达</h2><span>每页5人 · Rotowire Sleeper投影</span></div>
         <div class="radar-controls" id="radar-controls"><button class="radar-filter active" data-pos="all" type="button">全部</button><button class="radar-filter" data-pos="F" type="button">F</button><button class="radar-filter" data-pos="M" type="button">M</button><button class="radar-filter" data-pos="D" type="button">D</button><button class="radar-filter" data-pos="G" type="button">G</button></div>
         <div class="radar-list" id="radar-list"></div>
-        <div class="radar-note">按Rotowire 9月25日Fantrax/Sleeper GW6排名，从当前预计首发FA中按位置各取前5；伤停标签采用9月28日快照。投影会随首发预测变化。</div>
+        <div class="radar-pager"><button class="pager-btn" id="radar-prev" type="button">上一页</button><span class="page-state" id="radar-page">1 / 4</span><button class="pager-btn" id="radar-next" type="button">下一页</button></div>
+        <div class="radar-note">投影分直接取自Rotowire 9月25日Fantrax/Sleeper GW6排名。“外围底分”是Rotowire定义的floor：投影fantasy points扣除进球、助攻和零封奖励后的产出，不是统计分位数，也不是按本联盟完整自定义权重重新回测的结果。伤停标签采用9月28日快照。</div>
       </section>
       <div id="matches"></div>
       <section class="legend">
@@ -181,12 +183,19 @@
       document.getElementById('action-empty').classList.toggle('hidden',rows.length>0);
       document.getElementById('action-items').innerHTML=rows.map(([o,n,club,label,note,type])=>`<div class="action-item" data-owner="${o}" style="--owner-color:${owners[o].color}"><div class="action-top"><div class="action-name">${n}</div><span class="status ${type}">${label}</span></div><div class="action-meta">${club} · ${o}<br>${note}</div></div>`).join('');
     }
-    function renderRadar(pos='all'){
-      const rows=faRadar.filter(x=>pos==='all'||x[0]===pos).sort((a,b)=>b[4]-a[4]);
-      document.getElementById('radar-list').innerHTML=rows.map(([p,n,club,opp,pts,floor,flag],i)=>`<div class="radar-row" data-pos="${p}"><div class="radar-rank">${i+1}</div><div><div class="radar-name">${n}${flag?` <span class="status q">${flag}</span>`:''}</div><div class="radar-meta">${p} · ${club} ${opp}</div></div><div class="radar-num"><b>${pts.toFixed(2)}</b><span>投影</span></div><div class="radar-num"><b>${floor.toFixed(2)}</b><span>floor</span></div></div>`).join('');
+    let radarPos='all',radarPage=1;const radarPageSize=5;
+    function renderRadar(pos=radarPos,page=radarPage){
+      radarPos=pos;
+      const allRows=faRadar.filter(x=>pos==='all'||x[0]===pos).sort((a,b)=>b[4]-a[4]);
+      const pages=Math.max(1,Math.ceil(allRows.length/radarPageSize));radarPage=Math.min(Math.max(1,page),pages);
+      const offset=(radarPage-1)*radarPageSize;const rows=allRows.slice(offset,offset+radarPageSize);
+      document.getElementById('radar-list').innerHTML=rows.map(([p,n,club,opp,pts,floor,flag],i)=>`<div class="radar-row" data-pos="${p}"><div class="radar-rank">${offset+i+1}</div><div><div class="radar-name">${n}${flag?` <span class="status q">${flag}</span>`:''}</div><div class="radar-meta">${p} · ${club} ${opp}</div></div><div class="radar-num"><b>${pts.toFixed(2)}</b><span>投影</span></div><div class="radar-num"><b>${floor.toFixed(2)}</b><span>外围底分</span></div></div>`).join('');
+      document.getElementById('radar-page').textContent=`${radarPage} / ${pages}`;
+      document.getElementById('radar-prev').disabled=radarPage===1;document.getElementById('radar-next').disabled=radarPage===pages;
     }
     renderActions();renderRadar();
-    document.getElementById('radar-controls').addEventListener('click',e=>{const b=e.target.closest('.radar-filter');if(!b)return;document.querySelectorAll('.radar-filter').forEach(x=>x.classList.toggle('active',x===b));renderRadar(b.dataset.pos)});
+    document.getElementById('radar-controls').addEventListener('click',e=>{const b=e.target.closest('.radar-filter');if(!b)return;document.querySelectorAll('.radar-filter').forEach(x=>x.classList.toggle('active',x===b));renderRadar(b.dataset.pos,1)});
+    document.getElementById('radar-prev').addEventListener('click',()=>renderRadar(radarPos,radarPage-1));document.getElementById('radar-next').addEventListener('click',()=>renderRadar(radarPos,radarPage+1));
     function teamHTML(code){
       const [name,xi]=teams[code]; const own=xi.filter(x=>owned[x[0]]); const free=xi.filter(x=>!owned[x[0]]); const reserve=reserves[code]||[];
       const ownHTML=own.length?own.map(([n,pos])=>{const o=owned[n],info=owners[o],isQ=q.has(n);return `<div class="player" data-owner="${o}" style="--owner-color:${info.color}"><div><div class="pname">${n}</div><div class="pmeta">${pos} · ${o}</div></div><span class="status ${isQ?'q':'start'}">${isQ?'预计首发 · GTD':'预计首发'}</span></div>`}).join(''):`<div class="empty">无截图 owned 球员进入预测首发</div>`;
