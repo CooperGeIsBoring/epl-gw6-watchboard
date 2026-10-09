@@ -78,12 +78,12 @@
         <div class="clock"><div><b id="dd">--</b><span>天</span></div><div><b id="hh">--</b><span>时</span></div><div><b id="mm">--</b><span>分</span></div><div><b id="ss">--</b><span>秒</span></div></div>
       </div>
     </header>
-    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">99</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">4</b><span>替补 / 伤停</span></div><div class="stat"><b id="fa-count">125</b><span>FA预计首发</span></div></div>
+    <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">99</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">8</b><span>替补 / 伤停</span></div><div class="stat"><b id="fa-count">129</b><span>FA预计首发</span></div></div>
     <nav class="toolbar" aria-label="经理筛选"><div class="filters" id="filters"></div></nav>
     <main>
-      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已按 9 月 28 日交易更新；每支球队同时列出“预计首发”和“owned但预测替补 / IR”。FA 候选仍需在 Sleeper 复核 owner。</div>
+      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 沿用 9 月 28 日交易结果，首发与伤停已刷新至 10 月 9 日；每支球队同时列出“预计首发”和“owned但预测替补 / 伤停”。FA 候选仍需在 Sleeper 复核 owner。</div>
       <section class="module action-center" id="action-center">
-        <div class="module-head"><h2>关注球员</h2><span><b id="action-count">13</b> 人需关注</span></div>
+        <div class="module-head"><h2>关注球员</h2><span><b id="action-count">18</b> 人需关注</span></div>
         <div class="action-grid" id="action-items"></div>
         <div class="action-empty hidden" id="action-empty">该经理当前没有GTD、预测替补或IR球员</div>
       </section>
@@ -92,17 +92,17 @@
         <div class="radar-controls" id="radar-controls"><button class="radar-filter active" data-pos="all" type="button">全部</button><button class="radar-filter" data-pos="F" type="button">F</button><button class="radar-filter" data-pos="M" type="button">M</button><button class="radar-filter" data-pos="D" type="button">D</button><button class="radar-filter" data-pos="G" type="button">G</button></div>
         <div class="radar-list" id="radar-list"></div>
         <div class="radar-pager"><button class="pager-btn" id="radar-prev" type="button">上一页</button><span class="page-state" id="radar-page">1 / 4</span><button class="pager-btn" id="radar-next" type="button">下一页</button></div>
-        <div class="radar-note">投影分直接取自Rotowire 9月25日Fantrax/Sleeper GW6排名。“外围底分”是Rotowire定义的floor：投影fantasy points扣除进球、助攻和零封奖励后的产出，不是统计分位数，也不是按本联盟完整自定义权重重新回测的结果。伤停标签采用9月28日快照。</div>
+        <div class="radar-note">投影分直接取自Rotowire 10月7日Fantrax/Sleeper GW6排名。“外围底分”是Rotowire定义的floor：投影fantasy points扣除进球、助攻和零封奖励后的产出，不是统计分位数，也不是按本联盟完整自定义权重重新回测的结果。伤停标签采用10月9日快照。</div>
       </section>
       <div id="matches"></div>
       <section class="legend">
         <h2>状态与经理颜色</h2>
         <div class="legend-row"><span class="key status start">预计首发</span><span class="key status q">预计首发 · GTD</span><span class="key status bench">预测替补</span><span class="key status ir">IR / OUT</span><span class="key fa">FA预计首发</span></div>
         <div class="owners" id="owner-legend"></div>
-        <p>数据快照：2026-09-28。比赛时间采用北京时间。距离开赛仍有国际比赛日窗口，伤病和轮换预测会继续变化。</p>
+        <p>数据快照：2026-10-09。比赛时间采用北京时间。预测首发仍可能在赛前发布会及确认名单阶段变化。</p>
       </section>
     </main>
-    <footer>赛程：<a href="https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-202627-premier-league-season" target="_blank" rel="noopener">PremierLeague.com</a> · 阵容与状态：<a href="https://www.rotowire.com/soccer/lineups.php?week=36" target="_blank" rel="noopener">RotoWire EPL Lineups</a></footer>
+    <footer>赛程：<a href="https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-202627-premier-league-season" target="_blank" rel="noopener">PremierLeague.com</a> · 阵容与状态：<a href="https://www.rotowire.com/soccer/lineups.php" target="_blank" rel="noopener">RotoWire EPL Lineups</a></footer>
   </div>
   <script>
     const owners={
@@ -118,44 +118,50 @@
       'Kai Havertz':'grit50','Bukayo Saka':'grit50','A. Isak':'grit50','Bruno Guimaraes':'grit50','D. Szoboszlai':'grit50','Anton Stach':'grit50','M. Tavernier':'grit50','Alex Iwobi':'grit50','R. Calafiori':'grit50','K. Lewis-Potter':'grit50','Reece James':'grit50','A. Robinson':'grit50','J. Pickford':'grit50','M. De Cuyper':'grit50','Murillo':'grit50','Matheus Nunes':'grit50','K. Ajer':'grit50',
       'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','Joao Pedro':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','K. Tzolakis':'CooperGe'
     };
-    const q=new Set(['A. Semenyo','M. Rashford','Nobel Mendy','Declan Rice','Cole Palmer','Reece James','Kai Havertz','A. Isak','Cody Gakpo']);
+    const q=new Set(['A. Semenyo','M. Rashford','Declan Rice','Cole Palmer','Reece James','A. Isak','C. Kostoulas','J. van Hecke','V. Mykolenko','A. Khalaili']);
     const reserves={
-      ARS:[['Viktor Gyokeres','F','ACWSZM','bench','Havertz腿后侧伤势GTD；存在递补首发窗口']],
-      AVL:[['Leon Goretzka','M','MHerbaut','out','膝伤 · Rotowire标为OUT，预计10月10日前后复评']],
+      ARS:[['Kai Havertz','F/M','grit50','gtd','腿后侧伤势GTD；Gyokeres当前进入预测首发'],['C. Tzolis','F','MHerbaut','out','Rotowire标为OUT；Eze当前进入预测首发']],
+      AVL:[['Leon Goretzka','M','MHerbaut','gtd','膝伤 · 已由OUT调整为GTD，仍未进预测首发']],
+      BOU:[['Alex Scott','M','ACWSZM','out','Rotowire标为OUT；Lewis Cook当前进入预测首发']],
       CHE:[['Joao Pedro','F','CooperGe','gtd','膝伤水肿 · 目标10月10日复出；当前预测首发为Welbeck']],
-      LIV:[['Hugo Ekitike','F','MHerbaut','ir','跟腱伤 · 预计2027年1月复出']]
+      LIV:[['Cody Gakpo','F/M','scofield666','gtd','腿伤GTD；Victor Munoz当前进入预测首发'],['J. Jacquet','D','CooperGe','gtd','Rotowire标为GTD；Joe Gomez当前进入预测首发'],['Hugo Ekitike','F','MHerbaut','ir','跟腱伤 · 预计2027年1月复出']]
     };
     const actionItems=[
       ['MHerbaut','Hugo Ekitike','LIV','IR','跟腱伤，预计2027年1月复出','ir'],
-      ['MHerbaut','Leon Goretzka','AVL','OUT','膝伤，预计10月10日前后复评','out'],
+      ['MHerbaut','C. Tzolis','ARS','OUT','掉出预测首发，Rotowire标为OUT','out'],
+      ['ACWSZM','Alex Scott','BOU','OUT','掉出预测首发，Rotowire标为OUT','out'],
       ['CooperGe','Joao Pedro','CHE','GTD','当前未进预测首发，目标本轮复出','q'],
-      ['ACWSZM','Viktor Gyokeres','ARS','替补','Havertz GTD，可能递补首发','bench'],
+      ['MHerbaut','Leon Goretzka','AVL','GTD','仍未进入预测首发','q'],
+      ['grit50','Kai Havertz','ARS','GTD','掉出预测首发，Gyokeres当前顶上','q'],
+      ['scofield666','Cody Gakpo','LIV','GTD','掉出预测首发，Victor Munoz当前顶上','q'],
+      ['CooperGe','J. Jacquet','LIV','GTD','掉出预测首发，Joe Gomez当前顶上','q'],
       ['CooperGe','Cole Palmer','CHE','GTD','仍在Rotowire预测首发','q'],
-      ['grit50','Kai Havertz','ARS','GTD','腿后侧伤势，仍在预测首发','q'],
       ['grit50','A. Isak','LIV','GTD','大腿轻伤，仍在预测首发','q'],
       ['grit50','Reece James','CHE','GTD','仍在预测首发','q'],
-      ['scofield666','Cody Gakpo','LIV','GTD','国家队比赛腿伤，仍在预测首发','q'],
       ['scofield666','Declan Rice','ARS','GTD','退出国家队，仍在预测首发','q'],
       ['ACWSZM','A. Semenyo','MCI','GTD','脚踝问题，仍在预测首发','q'],
       ['ACWSZM','M. Rashford','MUN','GTD','仍在预测首发','q'],
-      ['ACWSZM','Nobel Mendy','HUL','GTD','仍在预测首发','q']
+      ['CooperGe','C. Kostoulas','BHA','GTD','仍在预测首发','q'],
+      ['CooperGe','J. van Hecke','TOT','GTD','仍在预测首发','q'],
+      ['scofield666','V. Mykolenko','EVE','GTD','仍在预测首发','q'],
+      ['MHerbaut','A. Khalaili','CRY','GTD','仍在预测首发','q']
     ];
     const faRadar=[
-      ['F','Danny Welbeck','CHE','vs BOU',10.01,5.54,''],['F','Yoane Wissa','NEW','at COV',9.19,6.36,''],['F','Nicolas Jackson','AVL','vs BRE',8.98,5.49,''],['F','Liam Delap','NFO','at CRY',8.89,5.53,''],['F','Evanilson','BOU','at CHE',8.86,5.26,''],
-      ['M','Emiliano Buendia','AVL','vs BRE',10.66,7.63,''],['M','John McGinn','AVL','vs BRE',9.90,7.48,''],['M','Jaden Philogene','IPS','vs FUL',8.80,6.00,''],['M','Jack Rudoni','COV','vs NEW',8.80,6.16,''],['M','Jacob Murphy','NEW','at COV',8.61,5.84,''],
-      ['D','Jurrien Timber','ARS','vs LEE',8.73,5.33,''],['D','Daniel Ballard','SUN','vs BHA',8.40,6.95,'GTD'],['D','Honest Ahanor','CRY','vs NFO',8.34,6.65,''],['D','Diogo Dalot','MUN','vs TOT',8.22,5.88,''],['D','Ezri Konsa','ARS','vs LEE',8.18,5.18,''],
-      ['G','Dean Henderson','CRY','vs NFO',6.46,4.65,'GTD'],['G','Matz Sels','NFO','at CRY',5.83,3.88,''],['G','Antonin Kinsky','TOT','at MUN',5.76,4.79,''],['G','Senne Lammens','MUN','vs TOT',5.47,2.86,''],['G','Robin Roefs','SUN','vs BHA',5.28,3.58,'']
+      ['F','Victor Munoz','LIV','vs MCI',9.74,7.02,''],['F','Yoane Wissa','NEW','at COV',9.19,6.36,''],['F','Evanilson','BOU','at CHE',8.99,5.29,''],['F','Nicolas Jackson','AVL','vs BRE',8.98,5.49,''],['F','Liam Delap','NFO','at CRY',8.89,5.53,''],
+      ['M','Emiliano Buendia','AVL','vs BRE',10.66,7.63,''],['M','John McGinn','AVL','vs BRE',9.90,7.48,''],['M','Eberechi Eze','ARS','vs LEE',8.94,6.21,''],['M','Jaden Philogene','IPS','vs FUL',8.80,6.00,''],['M','Jack Rudoni','COV','vs NEW',8.80,6.16,''],
+      ['D','Jurrien Timber','ARS','vs LEE',8.78,5.43,''],['D','Honest Ahanor','CRY','vs NFO',8.34,6.65,''],['D','Diogo Dalot','MUN','vs TOT',8.27,5.88,''],['D','Lisandro Martinez','MUN','vs TOT',8.14,5.92,''],['D','Tyrick Mitchell','CRY','vs NFO',8.10,5.30,''],
+      ['G','Dean Henderson','CRY','vs NFO',6.46,4.65,'GTD'],['G','Matz Sels','NFO','at CRY',5.83,3.88,''],['G','Senne Lammens','MUN','vs TOT',5.47,2.86,''],['G','Robin Roefs','SUN','vs BHA',5.31,3.61,''],['G','Antonin Kinsky','TOT','at MUN',5.24,4.39,'']
     ];
     const teams={
-      ARS:['Arsenal',[['David Raya','GK'],['R. Calafiori','DL'],['Ezri Konsa','DC'],['Gabriel','DC'],['J. Timber','DR'],['Declan Rice','DMC'],['Bruno Guimaraes','DMC'],['C. Tzolis','AML'],['M. Odegaard','AMC'],['Bukayo Saka','AMR'],['Kai Havertz','FW']]],
+      ARS:['Arsenal',[['David Raya','GK'],['R. Calafiori','DL'],['Gabriel','DC'],['Cristhian Mosquera','DC'],['J. Timber','DR'],['Declan Rice','DMC'],['Bruno Guimaraes','DMC'],['Eberechi Eze','AML'],['M. Odegaard','AMC'],['Bukayo Saka','AMR'],['Viktor Gyokeres','FW']]],
       LEE:['Leeds United',[['J. Trafford','GK'],['James Justin','DC'],['Nico Elvedi','DC'],['T. Muharemovic','DC'],['G. Gudmundsson','ML'],['Ethan Ampadu','MC'],['Ao Tanaka','MC'],['Jayden Bogle','MR'],['Noah Okafor','AMC'],['Anton Stach','AMC'],['D. Calvert-Lewin','FW']]],
       AVL:['Aston Villa',[['Zion Suzuki','GK'],['M. Ruggeri','DL'],['V. Lindelof','DC'],['Tyrone Mings','DC'],['Matty Cash','DR'],['B. Kamara','DMC'],['Joao Gomes','DMC'],['E. Buendia','AML'],['J. Manzambi','AMC'],['John McGinn','AMR'],['N. Jackson','FW']]],
       BRE:['Brentford',[['C. Kelleher','GK'],['K. Lewis-Potter','DL'],['K. Ajer','DC'],['J. Schuster','DC'],['M. Kayode','DR'],['M. Sangare','DMC'],['V. Janelt','DMC'],['Kevin Schade','AML'],['Y. Yarmolyuk','AMC'],['J. Anthony','AMR'],['Igor Thiago','FW']]],
       CHE:['Chelsea',[['E. Martinez','GK'],['W. Fofana','DC'],['M. Lacroix','DC'],['Levi Colwill','DC'],['Pep Chavarria','ML'],['M. Caicedo','MC'],['Reece James','MC'],['Pedro Neto','MR'],['Cole Palmer','AMC'],['M. Rogers','AMC'],['D. Welbeck','FW']]],
-      BOU:['AFC Bournemouth',[['D. Petrovic','GK'],['A. Truffert','DL'],['Antonio Silva','DC'],['James Hill','DC'],['Adam Smith','DR'],['Tyler Adams','DMC'],['Alex Scott','DMC'],['M. Tavernier','AML'],['R. Christie','AMC'],['Rayan','AMR'],['Evanilson','FW']]],
+      BOU:['AFC Bournemouth',[['D. Petrovic','GK'],['A. Truffert','DL'],['Antonio Silva','DC'],['James Hill','DC'],['Adam Smith','DR'],['Tyler Adams','DMC'],['Lewis Cook','DMC'],['M. Tavernier','AML'],['R. Christie','AMC'],['Rayan','AMR'],['Evanilson','FW']]],
       IPS:['Ipswich Town',[['C. Walton','GK'],['Leif Davis','DL'],["Dara O'Shea",'DC'],['Issa Diop','DC'],['A. Ouattara','DR'],['Sasa Lukic','DMC'],['E. Palacios','DMC'],['J. Philogene','AML'],['Julio Enciso','AMC'],['Jack Clarke','AMR'],['Emersonn','FW']]],
       FUL:['Fulham',[['Bernd Leno','GK'],['A. Robinson','DL'],['C. Bassey','DC'],['D. Affengruber','DC'],['T. Castagne','DR'],['Sander Berge','DMC'],['Shea Charles','DMC'],['Alex Iwobi','AML'],['Josh King','AMC'],['Oscar Bobb','AMR'],['Gonzalo Garcia','FW']]],
-      SUN:['Sunderland',[['Robin Roefs','GK'],['Reinildo','DL'],['D. Ballard','DC'],['Kevin Danso','DC'],['N. Mukiele','DR'],['Granit Xhaka','DMC'],['Noah Sadiki','DMC'],['Nilson Angulo','AML'],['Enzo Le Fee','AMC'],['T. Meunier','AMR'],['B. Brobbey','FW']]],
+      SUN:['Sunderland',[['Robin Roefs','GK'],['Reinildo','DL'],['Omar Alderete','DC'],['Kevin Danso','DC'],['N. Mukiele','DR'],['Granit Xhaka','DMC'],['Noah Sadiki','DMC'],['Nilson Angulo','AML'],['Enzo Le Fee','AMC'],['T. Meunier','AMR'],['W. Isidor','FW']]],
       BHA:['Brighton',[['B. Verbruggen','GK'],['O. Boscagli','DL'],['Lewis Dunk','DC'],['L. Vuskovic','DC'],['F. Kadioglu','DR'],['Pascal Gross','DMC'],['Yasin Ayari','DMC'],['M. De Cuyper','AML'],['M. Yalcouye','AMC'],['Diego Gomez','AMR'],['C. Kostoulas','FW']]],
       MUN:['Manchester United',[['S. Lammens','GK'],['Luke Shaw','DL'],['H. Maguire','DC'],['L. Martinez','DC'],['Diogo Dalot','DR'],['Y. Tielemans','DMC'],['K. Mainoo','DMC'],['M. Rashford','AML'],['Bruno Fernandes','AMC'],['Bryan Mbeumo','AMR'],['Matheus Cunha','FW']]],
       TOT:['Tottenham',[['A. Kinsky','GK'],['Destiny Udogie','DL'],['J. van Hecke','DC'],['M. van de Ven','DC'],['Archie Gray','DR'],['R. Bentancur','DMC'],['S. Tonali','DMC'],['O. Marmoush','AML'],['M. Kudus','AMC'],['Savio','AMR'],['D. Solanke','FW']]],
@@ -163,12 +169,12 @@
       NFO:['Nottingham Forest',[['Matz Sels','GK'],['N. Milenkovic','DC'],['Murillo','DC'],['Jair Cunha','DC'],['N. Williams','ML'],['X. Schlager','MC'],['James McAtee','MC'],['Daniel Munoz','MR'],['M. Gibbs-White','AMC'],['Dan Ndoye','AMC'],['Liam Delap','FW']]],
       HUL:['Hull City',[['K. Tzolakis','GK'],['Ryan Giles','DL'],['John Egan','DC'],['Semi Ajayi','DC'],['Nobel Mendy','DC'],['Lewie Coyle','DR'],['Sorba Thomas','ML'],['Regan Slater','MC'],['T. Iroegbunam','MC'],['M. Belloumi','MR'],['O. McBurnie','FW']]],
       EVE:['Everton',[['J. Pickford','GK'],['V. Mykolenko','DL'],['J. Branthwaite','DC'],['J. Tarkowski','DC'],['A. Maitland-Niles','DR'],['James Garner','DMC'],['H. Armstrong','DMC'],['J. Grealish','AML'],['K. Dewsbury-Hall','AMC'],['B. Johnson','AMR'],['T. Barry','FW']]],
-      LIV:['Liverpool',[['Alisson','GK'],['Milos Kerkez','DL'],['V. van Dijk','DC'],['J. Jacquet','DC'],['R. Araujo','DR'],['D. Szoboszlai','DMC'],['A. Mac Allister','DMC'],['B. Barcola','AML'],['F. Wirtz','AMC'],['Cody Gakpo','AMR'],['A. Isak','FW']]],
+      LIV:['Liverpool',[['Alisson','GK'],['Milos Kerkez','DL'],['Joe Gomez','DC'],['V. van Dijk','DC'],['R. Araujo','DR'],['D. Szoboszlai','DMC'],['A. Mac Allister','DMC'],['B. Barcola','AML'],['F. Wirtz','AMC'],['Victor Munoz','AMR'],['A. Isak','FW']]],
       MCI:['Manchester City',[['G. Donnarumma','GK'],['J. Gvardiol','DL'],['Marc Guehi','DC'],['Ruben Dias','DC'],['Matheus Nunes','DR'],['E. Fernandez','DMC'],['E. Anderson','DMC'],['A. Semenyo','AML'],['Rayan Cherki','AMC'],['I. Ndiaye','AMR'],['E. Haaland','FW']]],
       COV:['Coventry City',[['C. Rushworth','GK'],['S. Mfuni','DC'],['Bobby Thomas','DC'],['E. Pinnock','DC'],['Jay Dasilva','ML'],['Frank Onyeka','MC'],['Matt Grimes','MC'],['M. van Ewijk','MR'],['L. Tchaouna','AMC'],['Jack Rudoni','AMC'],['B. Thomas-Asante','FW']]],
       NEW:['Newcastle United',[['L. Hornicek','GK'],['Lewis Hall','DL'],['Malick Thiaw','DC'],['Sven Botman','DC'],['Amar Dedic','DR'],['Nico Gonzalez','DMC'],['Lewis Miley','DMC'],['H. Barnes','AML'],['Yoane Wissa','AMC'],['Jacob Murphy','AMR'],['M. Fernandez-Pardo','FW']]]
     };
-    const extraQ=new Set(['Lewis Dunk','Matty Cash','Joao Gomes','M. Caicedo','K. Mainoo','D. Henderson','N. Milenkovic','Amar Dedic','Nico Gonzalez','M. van Ewijk','D. Ballard','B. Brobbey']);
+    const extraQ=new Set(['Lewis Dunk','Matty Cash','M. Caicedo','K. Mainoo','D. Henderson','Amar Dedic','Lewis Miley','M. van Ewijk','W. Isidor','Cristhian Mosquera','Noah Sadiki','Yasin Ayari']);
     const fixtures=[
       ['10月10日 周六','19:30','ARS','LEE'],['10月10日 周六','22:00','AVL','BRE'],['10月10日 周六','22:00','CHE','BOU'],['10月10日 周六','22:00','IPS','FUL'],['10月10日 周六','22:00','SUN','BHA'],
       ['10月11日 周日','00:30','MUN','TOT'],['10月11日 周日','21:00','CRY','NFO'],['10月11日 周日','21:00','HUL','EVE'],['10月11日 周日','23:30','LIV','MCI'],['10月13日 周二','03:00','COV','NEW']
