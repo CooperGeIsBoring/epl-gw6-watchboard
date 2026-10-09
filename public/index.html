@@ -81,7 +81,7 @@
     <div class="stats"><div class="stat"><b>10</b><span>场比赛</span></div><div class="stat"><b id="owned-count">99</b><span>最新 owned</span></div><div class="stat"><b id="reserve-count">8</b><span>替补 / 伤停</span></div><div class="stat"><b id="fa-count">129</b><span>FA预计首发</span></div></div>
     <nav class="toolbar" aria-label="经理筛选"><div class="filters" id="filters"></div></nav>
     <main>
-      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 沿用 9 月 28 日交易结果，首发与伤停已刷新至 10 月 9 日；每支球队同时列出“预计首发”和“owned但预测替补 / 伤停”。FA 候选仍需在 Sleeper 复核 owner。</div>
+      <div class="notice">当前 Rotowire 页面把阵容标为 <b>Predicted Lineup</b>，不是确认首发。Owned 已加入 10 月 9 日 CooperGe 的 Tzolakis → Eze 操作，首发与伤停同步刷新；每支球队同时列出“预计首发”和“owned但预测替补 / 伤停”。FA 候选仍需在 Sleeper 复核 owner。</div>
       <section class="module action-center" id="action-center">
         <div class="module-head"><h2>关注球员</h2><span><b id="action-count">18</b> 人需关注</span></div>
         <div class="action-grid" id="action-items"></div>
@@ -116,7 +116,7 @@
       'D. Calvert-Lewin':'Showmader','Igor Thiago':'Showmader','Bruno Fernandes':'Showmader','Bryan Mbeumo':'Showmader','M. Gibbs-White':'Showmader','Diego Gomez':'Showmader','K. Dewsbury-Hall':'Showmader','H. Barnes':'Showmader','Pascal Gross':'Showmader','James Garner':'Showmader','J. Tarkowski':'Showmader','Daniel Munoz':'Showmader','R. Araujo':'Showmader','V. Janelt':'Showmader','Lewis Hall':'Showmader','E. Martinez':'Showmader',
       'E. Haaland':'MHerbaut','M. Belloumi':'MHerbaut','O. McBurnie':'MHerbaut','C. Tzolis':'MHerbaut','F. Wirtz':'MHerbaut','M. Odegaard':'MHerbaut','M. Kudus':'MHerbaut','Gabriel':'MHerbaut','James McAtee':'MHerbaut','A. Khalaili':'MHerbaut','N. Williams':'MHerbaut','David Raya':'MHerbaut','Sven Botman':'MHerbaut','J. Gvardiol':'MHerbaut','Malick Thiaw':'MHerbaut','Ethan Ampadu':'MHerbaut','Granit Xhaka':'MHerbaut','Hugo Ekitike':'MHerbaut','Leon Goretzka':'MHerbaut',
       'Kai Havertz':'grit50','Bukayo Saka':'grit50','A. Isak':'grit50','Bruno Guimaraes':'grit50','D. Szoboszlai':'grit50','Anton Stach':'grit50','M. Tavernier':'grit50','Alex Iwobi':'grit50','R. Calafiori':'grit50','K. Lewis-Potter':'grit50','Reece James':'grit50','A. Robinson':'grit50','J. Pickford':'grit50','M. De Cuyper':'grit50','Murillo':'grit50','Matheus Nunes':'grit50','K. Ajer':'grit50',
-      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','Joao Pedro':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','K. Tzolakis':'CooperGe'
+      'C. Kostoulas':'CooperGe','Rayan':'CooperGe','Cole Palmer':'CooperGe','Joao Pedro':'CooperGe','J. Grealish':'CooperGe','M. Rogers':'CooperGe','Josh King':'CooperGe','Savio':'CooperGe','L. Vuskovic':'CooperGe','M. Yalcouye':'CooperGe','J. Branthwaite':'CooperGe','Marc Guehi':'CooperGe','J. van Hecke':'CooperGe','J. Jacquet':'CooperGe','J. Trafford':'CooperGe','Eberechi Eze':'CooperGe'
     };
     const q=new Set(['A. Semenyo','M. Rashford','Declan Rice','Cole Palmer','Reece James','A. Isak','C. Kostoulas','J. van Hecke','V. Mykolenko','A. Khalaili']);
     const reserves={
@@ -148,9 +148,9 @@
     ];
     const faRadar=[
       ['F','Victor Munoz','LIV','vs MCI',9.74,7.02,''],['F','Yoane Wissa','NEW','at COV',9.19,6.36,''],['F','Evanilson','BOU','at CHE',8.99,5.29,''],['F','Nicolas Jackson','AVL','vs BRE',8.98,5.49,''],['F','Liam Delap','NFO','at CRY',8.89,5.53,''],
-      ['M','Emiliano Buendia','AVL','vs BRE',10.66,7.63,''],['M','John McGinn','AVL','vs BRE',9.90,7.48,''],['M','Eberechi Eze','ARS','vs LEE',8.94,6.21,''],['M','Jaden Philogene','IPS','vs FUL',8.80,6.00,''],['M','Jack Rudoni','COV','vs NEW',8.80,6.16,''],
+      ['M','Emiliano Buendia','AVL','vs BRE',10.66,7.63,''],['M','John McGinn','AVL','vs BRE',9.90,7.48,''],['M','Jaden Philogene','IPS','vs FUL',8.80,6.00,''],['M','Jack Rudoni','COV','vs NEW',8.80,6.16,''],['M','Jacob Murphy','NEW','at COV',8.61,5.84,''],
       ['D','Jurrien Timber','ARS','vs LEE',8.78,5.43,''],['D','Honest Ahanor','CRY','vs NFO',8.34,6.65,''],['D','Diogo Dalot','MUN','vs TOT',8.27,5.88,''],['D','Lisandro Martinez','MUN','vs TOT',8.14,5.92,''],['D','Tyrick Mitchell','CRY','vs NFO',8.10,5.30,''],
-      ['G','Dean Henderson','CRY','vs NFO',6.46,4.65,'GTD'],['G','Matz Sels','NFO','at CRY',5.83,3.88,''],['G','Senne Lammens','MUN','vs TOT',5.47,2.86,''],['G','Robin Roefs','SUN','vs BHA',5.31,3.61,''],['G','Antonin Kinsky','TOT','at MUN',5.24,4.39,'']
+      ['G','Dean Henderson','CRY','vs NFO',6.46,4.65,'GTD'],['G','Matz Sels','NFO','at CRY',5.83,3.88,''],['G','Konstantinos Tzolakis','HUL','vs EVE',5.72,4.14,''],['G','Senne Lammens','MUN','vs TOT',5.47,2.86,''],['G','Robin Roefs','SUN','vs BHA',5.31,3.61,'']
     ];
     const teams={
       ARS:['Arsenal',[['David Raya','GK'],['R. Calafiori','DL'],['Gabriel','DC'],['Cristhian Mosquera','DC'],['J. Timber','DR'],['Declan Rice','DMC'],['Bruno Guimaraes','DMC'],['Eberechi Eze','AML'],['M. Odegaard','AMC'],['Bukayo Saka','AMR'],['Viktor Gyokeres','FW']]],
